@@ -8,7 +8,7 @@ import Message from '../components/Message';
 import ScrollToBottom from 'react-scroll-to-bottom';
 let socket;
 const Chat = () => {
-  const secure_url = "http://localhost:8000/"
+  const secure_url = "https://webchat-server-ntze.onrender.com/"
   const [welcome, setWelcome] = useState()
   // const [joinMsg, setJoinMsg] = useState([])
   const [message, setMessage] = useState("")
