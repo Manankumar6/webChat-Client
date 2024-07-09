@@ -1,3 +1,10 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +17,46 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.landingpage {
+  width: 100%;
+  height: 100vh;
+  background: url('../public/background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.btn-close {
+  filter: invert(50%);
+}
+
+.btn-close:hover {
+  filter: invert(80%);
+}
+
+.chatbox {
+  display: inline-block;
+  width: 100%;
+  min-height: 73vh;
+  height: 73vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+
+  -ms-overflow-style: none; 
+}
+.right{
+  float: right;
+  background-color: #3e5c76;
+
+
+}
+.left{
+  float: left;
+  background-color: black;
+
+}
+.chatbox::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
