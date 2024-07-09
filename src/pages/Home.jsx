@@ -42,7 +42,7 @@ const setName = ()=>{
               
           <div className='d-flex justify-content-center'>
 
-              <img src="chat.gif" alt="chatlogo"  className='img-fluid my-3  rounded-3 ' width="50% " />
+              <img src="https://i.ibb.co/cvDTbp1/Chat.gif" alt="chatlogo"  className='img-fluid my-3  rounded-3 ' width="50% " />
           </div>
              
               <input type="text" placeholder='Enter Your Name' id='inputname' className=' py-2 bg-dark text-light form-control'/>
