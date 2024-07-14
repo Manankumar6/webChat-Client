@@ -177,7 +177,7 @@ const Chat = () => {
 
             {chatMsg && chatMsg.map((item, ind) => {
               return (
-                <Message date={item.date} message={item.message} user={item.id === id ? "" : item.user} key={ind} position={item.id === id ? 'right' : 'left'} />
+                <Message  message={item.message} user={item.id === id ? "" : item.user} key={ind} position={item.id === id ? 'right' : 'left'} />
 
               )
             })}

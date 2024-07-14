@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Message = ({ message, position, user, date }) => {
-
+const Message = ({ message, position, user }) => {
+  let date = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   return (<>
 
     <p className={`${position} fs-5 p-2  w-50 ms-2 me-2 rounded-3`}>
