@@ -1,7 +1,12 @@
 import React from 'react';
 
 const Message = ({ message, position, user }) => {
-  let date = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  const formatTime = (date) => {
+    const options = { hour: '2-digit', minute: '2-digit', hour12: true };
+    return new Intl.DateTimeFormat('en-US', options).format(date);
+  };
+
+  let date = formatTime(new Date());
   return (<>
 
     <p className={`${position} fs-5 p-2  w-50 ms-2 me-2 rounded-3`}>

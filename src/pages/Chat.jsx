@@ -33,6 +33,7 @@ const Chat = () => {
     if (message !== "") {
       socket.emit('message', { message, id });
       setMessage('')
+    
     }
   }
 
@@ -79,8 +80,9 @@ const Chat = () => {
 
   useEffect(() => {
     socket.on("sendMessage", (data) => {
-
       setChatMsg([...chatMsg, data])
+      const audio = new Audio('/incoming.mp3'); // Replace with your sound file path
+      audio.play();
       return () => {
         socket.off()
       }
