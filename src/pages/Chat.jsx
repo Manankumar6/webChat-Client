@@ -10,7 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 let socket;
 const Chat = () => {
-  const secure_url = "http://localhost:8000/"
+  const socketUrl = process.env.NODE_ENV === 'production'
+  ? 'https://webchat-server-ntze.onrender.com/'
+  : 'http://localhost:8000/';
   const [welcome, setWelcome] = useState()
   const [joinMsg, setJoinMsg] = useState([])
   const [connectedUsers, setConnectedUsers] = useState([]);
