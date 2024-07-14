@@ -12,12 +12,12 @@ const setName = ()=>{
 }
 
   return (
+    
     <div className='container-fluid landingpage text-light'>
-     
       <div className="row">
         <div className=" col-12 col-md-6 justify-content-center d-flex p-4 flex-column">
           <h1 style={{ fontSize: "3rem", width: "70%" }}><span style={{ color: "#fb8500" }}>Connect</span> with your loves ones</h1>
-          <h4>Cover a distance by our video call app </h4>
+          <h4>Cover a distance by our video call  app </h4>
          
 
             <button data-bs-toggle="modal" data-bs-target="#exampleModal" className='btn fs-5 mt-2 w-50 fw-bold text-light py-2' style={{ background: "#fb8500",  }}>Get Started</button>
