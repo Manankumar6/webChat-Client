@@ -10,11 +10,11 @@ import { useNavigate } from 'react-router-dom';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 let socket;
 const Chat = () => {
- const secure_url = process.env.NODE_ENV === 'production'
+  const secure_url = process.env.NODE_ENV === 'production'
     ? 'https://webchat-server-ntze.onrender.com/'
     : 'http://localhost:8000/';
   const [welcome, setWelcome] = useState()
-  const [joinMsg, setJoinMsg] = useState([])
+
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [message, setMessage] = useState("")
   const [id, setId] = useState()
@@ -40,8 +40,8 @@ const Chat = () => {
       socket.emit("joined", user);
 
     });
-    socket.on("welcome", ({ message }) => {
-      setWelcome(message)
+    socket.on("welcome", ({message}) => {
+      setWelcome(message);
     })
     socket.on("userJoined", (data) => {
       setChatMsg(prevChatMsg => [...prevChatMsg, data]);
@@ -86,8 +86,8 @@ const Chat = () => {
     }
     // eslint-disable-next-line 
   }, [user, navigate]);
-  useEffect(()=>{
-    if(!user){
+  useEffect(() => {
+    if (!user) {
       navigate("/")
     }
   })
@@ -96,7 +96,15 @@ const Chat = () => {
 
       <div className="row m-0 ">
         <div className="col-12 order-2 order-lg-1 col-lg-4 p-0">
-          <p className=' fs-4 ps-2 m-0 py-3 text-light shadow-sm' style={{background: "#343a40"}}>Connected Users <KeyboardDoubleArrowRightIcon className='fs-3'/></p>
+          <div className='d-flex gap-2  align-items-center  justify-content-between fs-4 ps-2 m-0 py-3 text-light shadow-sm' style={{ background: "#343a40" }}>
+            <div className='d-flex'>
+              <p>Connected Users </p>
+              <p><KeyboardDoubleArrowRightIcon className='fs-3' /></p>
+            </div>
+            <div className='me-2' >
+              <p className='fs-6 rounded-circle bg-light text-center fw-bold   text-dark' style={{ width: "25px" }}>{connectedUsers.length} </p>
+            </div>
+          </div>
           {connectedUsers.map((user) => {
             return (<>
               <p className=' text-light m-0 pb-4 ps-3 fs-4 fw-bold' style={{ background: "#778da9" }}>{user.name}</p>
@@ -108,17 +116,17 @@ const Chat = () => {
           {/* <img src="https://picsum.photos/800" className='img-fluid' alt="reandom imgae" /> */}
         </div>
         <div className=" col-12 col-lg-8 order-1 order-lg-2 text-light p-0   " style={{ background: "#343a40", minHeight: "70vh" }}>
-          <h2 className='text-center  p-3 shadow-lg'>Welcome to webChat app</h2>
+          <h2 className='  p-3 shadow-lg'>{welcome}</h2>
           <div className="d-flex flex-column m-0 py-3">
-            <p className='text-center  py-1 mx-auto rounded-pill' style={{ background: "#6c757d", width: "40%" }} >{welcome}</p>
-
-
+            <p className='text-center  py-1 mx-auto rounded-pill' style={{ background: "#6c757d", width: "40%" }} >Welcome to webChat app</p>
           </div>
+
+
           <ScrollToBottom className="chatbox "  >
 
             {chatMsg && chatMsg.map((item, ind) => {
               return (
-                <Message joinMsg={joinMsg} message={item.message} user={item.id === id ? "" : item.user} key={ind} position={item.id === id ? 'right' : 'left'} />
+                <Message date={item.date} message={item.message} user={item.id === id ? "" : item.user} key={ind} position={item.id === id ? 'right' : 'left'} />
 
               )
             })}
