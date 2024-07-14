@@ -8,6 +8,11 @@ import Message from '../components/Message';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { useNavigate } from 'react-router-dom';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import { FaLock } from "react-icons/fa";
+import { TiAttachment } from "react-icons/ti";
+// import ConfirmModal from '../components/ConfirmModal';
+
+
 let socket;
 const Chat = () => {
   const secure_url = process.env.NODE_ENV === 'production'
@@ -20,7 +25,8 @@ const Chat = () => {
   const [id, setId] = useState()
   const [chatMsg, setChatMsg] = useState([])
   const navigate = useNavigate();
-
+  // const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  // const [confirmNavigate, setConfirmNavigate] = useState(false); // State to confirm navigation
 
 
   const sendMessage = () => {
@@ -40,7 +46,7 @@ const Chat = () => {
       socket.emit("joined", user);
 
     });
-    socket.on("welcome", ({message}) => {
+    socket.on("welcome", ({ message }) => {
       setWelcome(message);
     })
     socket.on("userJoined", (data) => {
@@ -91,9 +97,54 @@ const Chat = () => {
       navigate("/")
     }
   })
+  // useEffect(() => {
+  //   const handleBeforeUnload = (e) => {
+  //     e.preventDefault();
+  //     e.returnValue = ''; // This is required for most browsers to show the dialog
+  //   };
+
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
+
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload);
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   const handlePopState = (e) => {
+  //     if (!confirmNavigate) {
+  //       setShowModal(true);
+  //       window.history.pushState(null, null, window.location.pathname);
+  //     } else {
+  //       navigate('/');
+  //     }
+  //   };
+
+  //   window.history.pushState(null, null, window.location.pathname);
+  //   window.addEventListener('popstate', handlePopState);
+
+  //   return () => {
+  //     window.removeEventListener('popstate', handlePopState);
+  //   };
+  // }, [navigate, confirmNavigate]);
+
+  // const handleCloseModal = () => {
+  //   setShowModal(false);
+  // };
+
+  // const handleConfirmNavigate = () => {
+  //   setConfirmNavigate(true);
+  //   setShowModal(false);
+  //   navigate('/');
+  // };
+
   return (
     <div className='container-fluid p-0 mb-1'>
-
+      {/* <ConfirmModal
+        show={showModal}
+        handleClose={handleCloseModal}
+        handleConfirm={handleConfirmNavigate}
+      /> */}
       <div className="row m-0 ">
         <div className="col-12 order-2 order-lg-1 col-lg-4 p-0">
           <div className='d-flex gap-2  align-items-center  justify-content-between fs-4 ps-2 m-0 py-3 text-light shadow-sm' style={{ background: "#343a40" }}>
@@ -116,9 +167,9 @@ const Chat = () => {
           {/* <img src="https://picsum.photos/800" className='img-fluid' alt="reandom imgae" /> */}
         </div>
         <div className=" col-12 col-lg-8 order-1 order-lg-2 text-light p-0   " style={{ background: "#343a40", minHeight: "70vh" }}>
-          <h2 className='  p-3 shadow-lg'>{welcome}</h2>
+          <h2 className='  p-3 shadow-lg' >Hello, <span style={{ color: "#fb8500" }}>{welcome}</span></h2>
           <div className="d-flex flex-column m-0 py-3">
-            <p className='text-center  py-1 mx-auto rounded-pill' style={{ background: "#6c757d", width: "40%" }} >Welcome to webChat app</p>
+            <p className='text-center  py-1 mx-auto rounded-3' style={{ background: "#6c757d", width: "70%" }} ><FaLock style={{ fontSize: "13px" }} /> Messages are end-to-end encrypted.</p>
           </div>
 
 
@@ -133,10 +184,27 @@ const Chat = () => {
           </ScrollToBottom>
 
 
-          <div className=" d-flex gap-3 mt-1 px-2" >
-            <input onKeyDown={(e) => e.key === "Enter" ? sendMessage() : null} value={message} onChange={(e) => { setMessage(e.target.value) }} type="text" placeholder='Send Message' className=' form-control p-3 bg-dark border-0 text-light mb-2' />
-            <Button onClick={sendMessage} variant="contained" className='mb-2'>{<IoSend />}</Button>
+          <div className="d-flex  gap-3 mt-1 px-2 mx-2">
+            <div className="flex-grow-1">
+              <input
+                onKeyDown={(e) => e.key === "Enter" ? sendMessage() : null}
+                value={message}
+                onChange={(e) => { setMessage(e.target.value) }}
+                type="text"
+                placeholder='Send Message'
+                className='form-control p-2 bg-dark border-0 text-light mb-2'
+              />
+            </div>
+            <div className="d-flex align-items-center">
+              <Button className='mb-2 rounded-circle me-2 p-0' style={{ width: "35px", minWidth: "35px", height: "38px", color: "#fff" }}>
+                <TiAttachment className='fs-4' />
+              </Button>
+              <Button color='primary' onClick={sendMessage} className='mb-2 rounded-circle p-0' style={{ width: "35px", minWidth: "35px", height: "38px" }}>
+                <IoSend className='fs-4' />
+              </Button>
+            </div>
           </div>
+
         </div>
       </div>
 

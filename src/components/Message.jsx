@@ -4,7 +4,7 @@ const Message = ({ message, position, user, date }) => {
 
   return (<>
 
-    <p className={`${position} fs-5 p-2 w-50 ms-4 rounded-3`}>
+    <p className={`${position} fs-5 p-2  w-50 ms-2 me-2 rounded-3`}>
       {user ?
         <div>
           <p className='p-0 m-0 fs-6' style={{ color: "#c879ff" }}>{user}</p>
