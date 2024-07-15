@@ -31,14 +31,14 @@ const setName = ()=>{
      
       {/* 
 <!-- Modal --> */}
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-        <div class="modal-dialog" >
-          <div class="modal-content" style={{background:"#161a1d"}}>
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Join Chat Now</h5>
-              <button ref={closeModal} type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+        <div className="modal-dialog" >
+          <div className="modal-content" style={{background:"#161a1d"}}>
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">Join Chat Now</h5>
+              <button ref={closeModal} type="button" className="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body ">
+            <div className="modal-body ">
               
           <div className='d-flex justify-content-center'>
 
@@ -47,11 +47,11 @@ const setName = ()=>{
              
               <input type="text" placeholder='Enter Your Name' id='inputname' className=' py-2 bg-dark text-light form-control'/>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               <NavLink to='/chat'>
 
-              <button onClick={setName} type="button" class="btn fw-bold" style={{background:"orange"}}>Join</button>
+              <button onClick={setName} type="button" className="btn fw-bold" style={{background:"orange"}}>Join</button>
               </NavLink>
             </div>
           </div>

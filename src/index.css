@@ -46,15 +46,22 @@ code {
   -ms-overflow-style: none; 
 }
 .right{
-  float: right;
-  background-color: #3e5c76;
+  /* float: right; */
 
+  justify-content: end;
 
 }
 .left{
-  float: left;
-  background-color: black;
+  /* float: left; */
 
+  justify-content: start;
+
+}
+.rightmsg{
+  background-color: #3e5c76;
+}
+.leftmsg{
+  background-color: black;
 }
 .chatbox::-webkit-scrollbar {
   width: 0;
