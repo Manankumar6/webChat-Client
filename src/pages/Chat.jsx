@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { FaLock } from "react-icons/fa";
 import { TiAttachment } from "react-icons/ti";
+import { RxCross2 } from "react-icons/rx";
 
 let socket;
 
@@ -22,7 +23,11 @@ const Chat = () => {
   const [id, setId] = useState();
   const [chatMsg, setChatMsg] = useState([]);
   const navigate = useNavigate();
+  const [replyingTo, setReplyingTo] = useState(null);
 
+  const handleReply = (message, user) => {
+    setReplyingTo({ message, user });
+  };
   useEffect(() => {
     socket = socketIo(secure_url);
 
@@ -100,15 +105,16 @@ const Chat = () => {
 
   const sendMessage = () => {
     if (message !== "") {
-      socket.emit('message', { message, id });
+      socket.emit('message', { message, id, replyTo: replyingTo });
       setMessage('');
+      setReplyingTo(null); // Reset replyingTo state after sending the message
     }
   };
 
   return (
     <div className='container-fluid p-0 mb-1'>
       <div className="row m-0">
-        <div className="col-12 order-2 order-lg-1 col-lg-4 p-0">
+        <div className="col-12 order-2 order-lg-1 col-lg-4 p-0" style={{background:'#adb5bd'}}>
           <div className='d-flex gap-2 align-items-center justify-content-between fs-4 ps-2 m-0 py-3 text-light shadow-sm' style={{ background: "#343a40" }}>
             <div className='d-flex'>
               <p>Connected Users </p>
@@ -121,7 +127,7 @@ const Chat = () => {
           {connectedUsers.map((user) => (
             <div key={user.name}>
               <p className='text-light m-0 pb-4 ps-3 fs-4 fw-bold' style={{ background: "#778da9" }}>{user.name}</p>
-              <hr className='m-0 p-0' />
+              <hr className='m-0 p-0 ' />
             </div>
           ))}
         </div>
@@ -133,10 +139,28 @@ const Chat = () => {
 
           <ScrollToBottom className="chatbox">
             {chatMsg && chatMsg.map((item, ind) => (
-              <Message message={item.message} user={item.id === id ? "" : item.user} key={ind} position={item.id === id ? 'right' : 'left'} />
+              <Message
+                onReply={handleReply}
+                message={item.message}
+                user={item.id === id ? "" : item.user}
+                key={ind}
+                position={item.id === id ? 'right' : 'left'}
+                replyTo={item.replyTo}
+              />
             ))}
           </ScrollToBottom>
+          {replyingTo && (
+            <div className="d-flex replymsg mx-3">
+              <div>
 
+                <p>{replyingTo.user ? replyingTo.user : 'You'}</p>
+                <p>{replyingTo.message}</p>
+              </div>
+              <div>
+                <RxCross2 onClick={()=>{setReplyingTo(null)}} style={{position:"absolute", right:"5px"}} />
+              </div>
+            </div>
+          )}
           <div className="d-flex gap-3 mt-1 px-2 mx-2">
             <div className="flex-grow-1">
               <input
