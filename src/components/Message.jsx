@@ -29,7 +29,7 @@ const Message = ({ message, position, user, onReply, replyTo }) => {
             <hr className='m-0 p-0' />
             {replyTo && (
               <div className="  p-1 rounded-3" style={{background:"#495057",borderLeft: '2px solid #ff0000'}}>
-                <p className='m-0 fw-bold' style={{ color: "lightgray" }}>{replyTo.user ? replyTo.user : 'You'}:</p>
+                <p className='m-0 fw-bold' style={{ color: "lightgray" }}>{replyTo.user ? replyTo.user : user}:</p>
                 <p className='m-0' style={{ color: "lightgray" }}>{replyTo.message}</p>
               </div>
             )}

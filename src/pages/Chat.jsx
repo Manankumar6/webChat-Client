@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import socketIo from 'socket.io-client';
 import { user } from '../pages/Home';
 import { IoSend } from "react-icons/io5";
@@ -24,10 +24,15 @@ const Chat = () => {
   const [chatMsg, setChatMsg] = useState([]);
   const navigate = useNavigate();
   const [replyingTo, setReplyingTo] = useState(null);
-
+  const inputRef = useRef(null);
   const handleReply = (message, user) => {
     setReplyingTo({ message, user });
   };
+  useEffect(() => {
+    if (replyingTo && inputRef.current) {
+      inputRef.current.focus(); // Focus the input field when replying
+    }
+  }, [replyingTo]);
   useEffect(() => {
     socket = socketIo(secure_url);
 
@@ -127,7 +132,7 @@ const Chat = () => {
           {connectedUsers.map((user) => (
             <div key={user.name}>
               <p className='text-light m-0 pb-4 ps-3 fs-4 fw-bold' style={{ background: "#778da9" }}>{user.name}</p>
-              <hr className='m-0 p-0 ' />
+              <hr className='m-0 p-0 ' style={{background:"#black"}} />
             </div>
           ))}
         </div>
@@ -164,6 +169,7 @@ const Chat = () => {
           <div className="d-flex gap-3 mt-1 px-2 mx-2">
             <div className="flex-grow-1">
               <input
+                 ref={inputRef}
                 onKeyDown={(e) => e.key === "Enter" ? sendMessage() : null}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
