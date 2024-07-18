@@ -10,13 +10,14 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import { FaLock } from "react-icons/fa";
 import { TiAttachment } from "react-icons/ti";
 import { RxCross2 } from "react-icons/rx";
-
+import TextField from '@mui/material/TextField';
+import { FaCircle } from "react-icons/fa6";
 let socket;
 
 const Chat = () => {
   const secure_url = process.env.NODE_ENV === 'production'
     ? 'https://webchat-server-ntze.onrender.com/'
-    : 'http://localhost:8000/';
+    : 'http://localhost:5000/';
   const [welcome, setWelcome] = useState();
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [message, setMessage] = useState("");
@@ -25,14 +26,10 @@ const Chat = () => {
   const navigate = useNavigate();
   const [replyingTo, setReplyingTo] = useState(null);
   const inputRef = useRef(null);
-  const handleReply = (message, user) => {
-    setReplyingTo({ message, user });
-  };
-  useEffect(() => {
-    if (replyingTo && inputRef.current) {
-      inputRef.current.focus(); // Focus the input field when replying
-    }
-  }, [replyingTo]);
+
+
+
+
   useEffect(() => {
     socket = socketIo(secure_url);
 
@@ -64,6 +61,7 @@ const Chat = () => {
     return () => {
       socket.disconnect();
     };
+    // eslint-disable-next-line
   }, [secure_url]);
 
   useEffect(() => {
@@ -84,6 +82,7 @@ const Chat = () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       socket.off();
     };
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -100,12 +99,14 @@ const Chat = () => {
     return () => {
       window.removeEventListener('popstate', handleBackButton);
     };
+    // eslint-disable-next-line
   }, [navigate]);
 
   useEffect(() => {
     if (user === null || user === '') {
       navigate('/');
     }
+    // eslint-disable-next-line
   }, [user, navigate]);
 
   const sendMessage = () => {
@@ -115,14 +116,22 @@ const Chat = () => {
       setReplyingTo(null); // Reset replyingTo state after sending the message
     }
   };
-
+  const handleReply = (message, user) => {
+    setReplyingTo({ message, user });
+  };
+  useEffect(() => {
+    if (replyingTo && inputRef.current) {
+      inputRef.current.focus(); // Focus the input field when replying
+    }
+    // eslint-disable-next-line
+  }, [replyingTo]);
   return (
     <div className='container-fluid p-0 mb-1'>
       <div className="row m-0">
-        <div className="col-12 order-2 order-lg-1 col-lg-4 p-0" style={{background:'#adb5bd'}}>
+        <div className="col-12 order-2 order-lg-1 col-lg-4 p-0" style={{ background: '#adb5bd' }}>
           <div className='d-flex gap-2 align-items-center justify-content-between fs-4 ps-2 m-0 py-3 text-light shadow-sm' style={{ background: "#343a40" }}>
             <div className='d-flex'>
-              <p>Connected Users </p>
+              <p>Active Users </p>
               <p><KeyboardDoubleArrowRightIcon className='fs-3' /></p>
             </div>
             <div className='me-2'>
@@ -131,14 +140,17 @@ const Chat = () => {
           </div>
           {connectedUsers.map((user) => (
             <div key={user.name}>
-              <p className='text-light m-0 pb-4 ps-3 fs-4 fw-bold' style={{ background: "#778da9" }}>{user.name}</p>
-              <hr className='m-0 p-0 ' style={{background:"#black"}} />
+              <p className='text-light m-0 pb-4 ps-3 fs-4 fw-bold' style={{ background: "#778da9" }}>{user.name}
+
+              <p className='m-0 ms-1 p-0' style={{fontSize:'10px'}}><span ><FaCircle style={{color:"#70e000"}} /></span> Online</p>
+              </p>
+              <hr className='m-0 p-0 ' style={{ background: "#black" }} />
             </div>
           ))}
         </div>
         <div className="col-12 col-lg-8 order-1 order-lg-2 text-light p-0" style={{ background: "#343a40", minHeight: "70vh" }}>
           <h2 className='p-3 shadow-lg'>Hello, <span style={{ color: "#fb8500" }}>{welcome}</span></h2>
-          <div className="d-flex flex-column m-0 py-3">
+          <div className="d-flex flex-column m-0 py-3 ">
             <p className='text-center py-1 mx-auto rounded-3' style={{ background: "#6c757d", width: "70%" }}><FaLock style={{ fontSize: "13px" }} /> Messages are end-to-end encrypted.</p>
           </div>
 
@@ -162,20 +174,30 @@ const Chat = () => {
                 <p>{replyingTo.message}</p>
               </div>
               <div>
-                <RxCross2 onClick={()=>{setReplyingTo(null)}} style={{position:"absolute", right:"5px"}} />
+                <RxCross2 onClick={() => { setReplyingTo(null) }} style={{ position: "absolute", right: "5px" }} />
               </div>
             </div>
           )}
           <div className="d-flex gap-3 mt-1 px-2 mx-2">
             <div className="flex-grow-1">
-              <input
-                 ref={inputRef}
+              <TextField
+                id="outlined-basic"
+                label="Send Message"
+                variant="outlined"
+                ref={inputRef}
                 onKeyDown={(e) => e.key === "Enter" ? sendMessage() : null}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 type="text"
-                placeholder='Send Message'
-                className='form-control p-2 bg-dark border-0 text-light mb-2'
+                InputProps={{
+                  style: {
+                    color: '#fff', // Text color
+                  }
+                }}
+                InputLabelProps={{
+                  style: { color: '#fff' }, // Label color
+                }}
+                className=' bg-dark w-100 border-0  mb-2'
               />
             </div>
             <div className="d-flex align-items-center">

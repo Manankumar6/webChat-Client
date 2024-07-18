@@ -33,7 +33,7 @@ const Message = ({ message, position, user, onReply, replyTo }) => {
                 <p className='m-0' style={{ color: "lightgray" }}>{replyTo.message}</p>
               </div>
             )}
-            <p className='mb-0 mt-1'>{message}</p>
+            <p className='mb-0 mt-1 shadow-sm'>{message}</p>
             <p className='text-light text-end mt-1 mb-0 ' style={{ fontSize: "13px" }}>{date}</p>
           </div>
         ) : (
@@ -44,7 +44,7 @@ const Message = ({ message, position, user, onReply, replyTo }) => {
                 <p className='m-0' style={{ color: "lightgray" }}>{replyTo.message}</p>
               </div>
             )}
-            <p className='mb-0 mt-1'>{message}</p>
+            <p className='mb-0 mt-1 shadow-sm'>{message}</p>
             <p className='text-light text-end mt-1 mb-0' style={{ fontSize: "13px" }}>{date}</p>
           </div>
         )}

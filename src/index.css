@@ -84,3 +84,23 @@ code {
   padding: 5px;
   position: relative;
 }
+/* custom-textfield.css */
+.custom-textfield .MuiInputBase-input {
+  color: #fff; /* Text color */
+}
+
+.custom-textfield .MuiInputLabel-root {
+  color: #fff; /* Label color */
+}
+
+.custom-textfield .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: #fff; /* Outline color */
+}
+
+.custom-textfield .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #fff; /* Outline hover color */
+}
+
+.custom-textfield .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #fff; /* Outline focus color */
+}
