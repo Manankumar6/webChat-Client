@@ -28,14 +28,22 @@ const Chat = () => {
   const inputRef = useRef(null);
 
 
+  const clr = ["#f6bd60", "#f28482", "#f5cac3", "#84a59d","#90e0ef","#c77dff"]
+  const rndnum = Math.floor(Math.random() * clr.length)
+  const randomClr = clr[rndnum];
 
+
+  const userData = {
+    user,
+    bg: randomClr
+  }
 
   useEffect(() => {
     socket = socketIo(secure_url);
 
     socket.on("connect", () => {
       setId(socket.id);
-      socket.emit("joined", user);
+      socket.emit("joined", userData);
     });
 
     socket.on("welcome", ({ message }) => {
@@ -103,7 +111,7 @@ const Chat = () => {
   }, [navigate]);
 
   useEffect(() => {
-    if (user === null || user === '') {
+    if (user === null || user === '' || user === undefined) {
       navigate('/');
     }
     // eslint-disable-next-line
@@ -130,22 +138,27 @@ const Chat = () => {
       <div className="row m-0">
         <div className="col-12 order-2 order-lg-1 col-lg-4 p-0" style={{ background: '#adb5bd' }}>
           <div className='d-flex gap-2 align-items-center justify-content-between fs-4 ps-2 m-0 py-3 text-light shadow-sm' style={{ background: "#343a40" }}>
-            <div className='d-flex'>
+            <div className='d-flex' >
               <p>Active Users </p>
+              
               <p><KeyboardDoubleArrowRightIcon className='fs-3' /></p>
             </div>
             <div className='me-2'>
               <p className='fs-6 rounded-circle bg-light text-center fw-bold text-dark' style={{ width: "25px" }}>{connectedUsers.length} </p>
             </div>
           </div>
-          {connectedUsers.map((user) => (
-            <div key={user.name}>
-              <p className='text-light m-0 pb-4 ps-3 fs-4 fw-bold' style={{ background: "#778da9" }}>{user.name}
-
-              <p className='m-0 ms-1 p-0' style={{fontSize:'10px'}}><span ><FaCircle style={{color:"#70e000"}} /></span> Online</p>
-              </p>
-              <hr className='m-0 p-0 ' style={{ background: "#black" }} />
-            </div>
+          { connectedUsers.map((user) => (
+            
+              <div key={user.name}>
+                <p className='text-light m-0 pb-4 ps-3 fs-4 fw-bold' style={{ background: "#778da9" }}>
+                  {user.name}
+                  <p className='m-0 ms-1 p-0' style={{ fontSize: '10px' }}>
+                    <span><FaCircle style={{ color: "#70e000" }} /></span> Online
+                  </p>
+                </p>
+                <hr className='m-0 p-0' style={{ background: "#black" }} />
+              </div>
+         
           ))}
         </div>
         <div className="col-12 col-lg-8 order-1 order-lg-2 text-light p-0" style={{ background: "#343a40", minHeight: "70vh" }}>
@@ -157,6 +170,7 @@ const Chat = () => {
           <ScrollToBottom className="chatbox">
             {chatMsg && chatMsg.map((item, ind) => (
               <Message
+                bg={connectedUsers.find(user => user.name === item.user)?.bg || randomClr} // Updated to use `find` method for background color
                 onReply={handleReply}
                 message={item.message}
                 user={item.id === id ? "" : item.user}
@@ -166,6 +180,7 @@ const Chat = () => {
               />
             ))}
           </ScrollToBottom>
+
           {replyingTo && (
             <div className="d-flex replymsg mx-3">
               <div>

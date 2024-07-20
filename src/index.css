@@ -44,39 +44,47 @@ code {
   scrollbar-width: none;
   overflow-x: hidden;
 
-  -ms-overflow-style: none; 
+  -ms-overflow-style: none;
 }
-.right{
+
+.right {
   /* float: right; */
 
   justify-content: end;
 
 }
-.left{
+
+.left {
   /* float: left; */
 
   justify-content: start;
 
 }
-.rightmsg{
+
+.rightmsg {
   background-color: #3e5c76;
 }
-.leftmsg{
+
+.leftmsg {
   background-color: black;
 }
+
 .chatbox::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
-.received{
+
+.received {
   border-radius: 12px 12px 12px 0;
   transform: skew(-1deg);
 }
+
 .sent {
   border-radius: 12px 12px 0 12px;
   transform: skew(1deg);
 }
-.replymsg{
+
+.replymsg {
   background-color: black;
   border-radius: 12px;
   width: 87%;
@@ -84,23 +92,48 @@ code {
   padding: 5px;
   position: relative;
 }
+
 /* custom-textfield.css */
 .custom-textfield .MuiInputBase-input {
-  color: #fff; /* Text color */
+  color: #fff;
+  /* Text color */
 }
 
 .custom-textfield .MuiInputLabel-root {
-  color: #fff; /* Label color */
+  color: #fff;
+  /* Label color */
 }
 
 .custom-textfield .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-  border-color: #fff; /* Outline color */
+  border-color: #fff;
+  /* Outline color */
 }
 
 .custom-textfield .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: #fff; /* Outline hover color */
+  border-color: #fff;
+  /* Outline hover color */
 }
 
 .custom-textfield .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: #fff; /* Outline focus color */
+  border-color: #fff;
+  /* Outline focus color */
+}
+
+.name_logo {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  color: black;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  margin-top: 0.6rem;
+  font-weight: 600;
+  margin-left: 0.4rem;
+}
+@media (min-width:998px) {
+  .name_logo{
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
 }

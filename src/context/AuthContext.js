@@ -59,12 +59,12 @@ const AuthProvider = ({ children }) => {
             dispatch({ type: 'SET_LOADING', payload: false });
         }
     };
-    console.log(state.isAuth)
+
     const logIn = async (userName, password) => {
         try {
             dispatch({ type: 'SET_LOADING', payload: true });
             const { data } = await axiosInstance.post('/auth/login', { userName, password });
-            console.log(data)
+         
             if (data) {
                 navigate('/webchat')
                 dispatch({ type: 'SET_USER_LOGIN', payload: data.user });
