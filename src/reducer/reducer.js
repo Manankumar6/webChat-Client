@@ -18,7 +18,7 @@ const AuthReducer = (state, action) => {
                 isAuth:true
             };
             case "HANDLE_INPUT":
-                console.log(action.payload.name)
+           
                 const { name, value } = action.payload
                 return {
 

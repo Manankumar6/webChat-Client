@@ -12,6 +12,7 @@ import { TiAttachment } from "react-icons/ti";
 import { RxCross2 } from "react-icons/rx";
 import TextField from '@mui/material/TextField';
 import { FaCircle } from "react-icons/fa6";
+
 let socket;
 
 const Chat = () => {
@@ -23,6 +24,7 @@ const Chat = () => {
   const [message, setMessage] = useState("");
   const [id, setId] = useState();
   const [chatMsg, setChatMsg] = useState([]);
+
   const navigate = useNavigate();
   const [replyingTo, setReplyingTo] = useState(null);
   const inputRef = useRef(null);
@@ -43,14 +45,14 @@ const Chat = () => {
 
     socket.on("connect", () => {
       setId(socket.id);
-      socket.emit("joined", userData);
+      socket.emit("guestJoined", userData);
     });
 
     socket.on("welcome", ({ message }) => {
       setWelcome(message);
     });
 
-    socket.on("userJoined", (data) => {
+    socket.on("guestUserJoined", (data) => {
       setChatMsg(prevChatMsg => [...prevChatMsg, data]);
     });
 
@@ -199,7 +201,7 @@ const Chat = () => {
                 id="outlined-basic"
                 label="Send Message"
                 variant="outlined"
-                ref={inputRef}
+                inputRef={inputRef}
                 onKeyDown={(e) => e.key === "Enter" ? sendMessage() : null}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -212,7 +214,7 @@ const Chat = () => {
                 InputLabelProps={{
                   style: { color: '#fff' }, // Label color
                 }}
-                className=' bg-dark w-100 border-0  mb-2'
+                className=' bg-dark w-100   mb-2'
               />
             </div>
             <div className="d-flex align-items-center">

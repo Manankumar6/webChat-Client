@@ -4,7 +4,8 @@ import { NavLink } from 'react-router-dom'
 import { useAuthContext } from '../context/AuthContext'
 
 const Navbar = () => {
-    const { isAuth ,logOut} = useAuthContext();
+    const { isAuth, logOut, user } = useAuthContext();
+
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -15,26 +16,31 @@ const Navbar = () => {
                     </button>
                     <div className="collapse navbar-collapse shadow-sm " id="navbarNavAltMarkup">
                         <div className="navbar-nav ms-auto gap-2">
-                            <NavLink to='/' className='nav-link'>
-                                <Button className=' text-light ' style={{ background: "transparent" }}>Join as guest</Button>
-                            </NavLink>
-                            <NavLink to='/signup' className='nav-link'>
+                           {isAuth && <h5 className=' text-light my-auto' ><span style={{ color: "orange" }}>Hi,</span> {user && user.userName}</h5>
+}
 
-                                <Button className=' text-light ' style={{ background: "transparent" }}>Register</Button>
-                            </NavLink>
                             {isAuth ?
-                            <NavLink className='nav-link'>
+                                <NavLink className='nav-link'>
 
-                                <Button className=' fw-bold text-light  ' style={{ background: "#fb8500" }} onClick={logOut} >Log out</Button>
-                            </NavLink>
-                              
-                                :
-                                <NavLink className='nav-link' to='/signup'>
-                                    <Button className=' fw-bold text-light  ' style={{ background: "#fb8500" }}>Login</Button>
-                                </NavLink>}
-                            </div>
+                                    <Button className=' fw-bold text-light  ' style={{ background: "#fb8500" }} onClick={logOut} >Log out</Button>
+                                </NavLink>
+
+                                : <>
+                                    <NavLink to='/' className='nav-link'>
+                                        <Button className=' text-light ' style={{ background: "transparent" }}>Join as guest</Button>
+                                    </NavLink>
+                                    <NavLink to='/signup' className='nav-link'>
+
+                                        <Button className=' text-light ' style={{ background: "transparent" }}>Register</Button>
+                                    </NavLink>
+                                    <NavLink className='nav-link' to='/signup'>
+                                        <Button className=' fw-bold text-light  ' style={{ background: "#fb8500" }}>Login</Button>
+                                    </NavLink>
+                                </>
+                            }
+                        </div>
                     </div>
-                    </div>
+                </div>
             </nav>
         </div>
     )

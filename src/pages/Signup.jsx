@@ -22,11 +22,11 @@ const Signup = () => {
         <div className='container-fluid bg-dark' style={{ height: "100vh" }}>
 
             <div className="row">
-                <div className="col my-3 text-light">
+                <div className="col-12 col-md-6 my-3 text-light">
                     <h1 className='text-center'>Real-Time Chat for Real-Life <span style={{ color: "orange" }}>Connections</span></h1>
                     <img className='img-fluid' src="hero.png" alt="img" />
                 </div>
-                <div className="col">
+                <div className="col-12 col-md-6">
                     <div className="mx-auto ">
 
                         <div className="d-flex gap-3 mx-auto w-75 justify-content-center  p-2">

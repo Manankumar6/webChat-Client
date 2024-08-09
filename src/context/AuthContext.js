@@ -52,6 +52,7 @@ const AuthProvider = ({ children }) => {
             if (data) {
 
                 dispatch({ type: 'GET_USER', payload: data.user });
+                navigate('/webchat')
             }
         } catch (error) {
             console.error('Error signing up:', error);
@@ -64,10 +65,12 @@ const AuthProvider = ({ children }) => {
         try {
             dispatch({ type: 'SET_LOADING', payload: true });
             const { data } = await axiosInstance.post('/auth/login', { userName, password });
+           
+
          
             if (data) {
-                navigate('/webchat')
                 dispatch({ type: 'SET_USER_LOGIN', payload: data.user });
+                navigate('/webchat')
             }
         } catch (error) {
             console.error('Error logging in:', error);
@@ -94,7 +97,7 @@ const AuthProvider = ({ children }) => {
     }, [state.isAuth]);
 
     return (
-        <AuthContext.Provider value={{ ...state, handleInput, signUp, logIn, logOut }}>
+        <AuthContext.Provider value={{ ...state, handleInput,  signUp, logIn, logOut }}>
             {children}
         </AuthContext.Provider>
     );
