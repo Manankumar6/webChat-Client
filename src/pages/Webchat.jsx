@@ -8,6 +8,9 @@ import { HiDotsVertical } from "react-icons/hi";
 
 import { useAuthContext } from '../context/AuthContext';
 import Message from '../components/Message';
+import { NavLink } from 'react-router-dom';
+import ConnectedUser from '../components/ConnectedUser';
+import FindFriend from '../components/FindFriend';
 let socket;
 const Webchat = () => {
   const secure_url = process.env.NODE_ENV === 'production'
@@ -17,24 +20,25 @@ const Webchat = () => {
 
   let username = user.userName;
   const [message, setMessage] = useState("");
-  const [id,setId] = useState();
-  const [chatMsg,setChatMsg] = useState([])
+  const [id, setId] = useState();
+  const [chatMsg, setChatMsg] = useState([])
   console.log(chatMsg)
   const [connectedUsers, setConnectedUsers] = useState([]);
-  console.log(connectedUsers,"connected user")
+  console.log(connectedUsers, "connected user")
   const [joinuser, setJoinUser] = useState([])
   const [privateMessages, setPrivateMessages] = useState([]);
   const [welcome, setWelcome] = useState();
+  const [findFriend, setFindFriend] = useState(false)
 
 
-const clr = ["#f6bd60", "#f28482", "#f5cac3", "#84a59d","#90e0ef","#c77dff"]
-const rndnum = Math.floor(Math.random() * clr.length)
-const randomClr = clr[rndnum];
+  const clr = ["#f6bd60", "#f28482", "#f5cac3", "#84a59d", "#90e0ef", "#c77dff"]
+  const rndnum = Math.floor(Math.random() * clr.length)
+  const randomClr = clr[rndnum];
 
-const userData = {
-  username,
-  bg: randomClr
-}
+  const userData = {
+    username,
+    bg: randomClr
+  }
   useEffect(() => {
     socket = socketIo(secure_url);
     socket.on("connect", () => {
@@ -44,9 +48,9 @@ const userData = {
         setJoinUser(preData => [...preData, data])
       })
       socket.on("connectedUser", (data) => {
-    setConnectedUsers(data)
+        setConnectedUsers(data)
       })
-     });
+    });
 
     socket.on("welcome", ({ message }) => {
       setWelcome(message);
@@ -63,49 +67,77 @@ const userData = {
   }, [secure_url]);
 
   const sendMessage = () => {
-    if (message !== "" ) {
+    if (message !== "") {
       socket.emit('message', { message, id });
       setMessage('');
       // setReplyingTo(null); // Reset replyingTo state after sending the message
     }
   };
-useEffect(()=>{
-  socket.on("sendMessage", (data) => {
-    setChatMsg(prevChatMsg => [...prevChatMsg, data]);
-    const audio = new Audio('/incoming.mp3');
-    audio.play();
-  });
-},[])
+  useEffect(() => {
+    socket.on("sendMessage", (data) => {
+      setChatMsg(prevChatMsg => [...prevChatMsg, data]);
+      const audio = new Audio('/incoming.mp3');
+      audio.play();
+    });
+  }, [])
 
   return (
     <div className='container-fluid'>
-      <div className="row">
-        <div className="col-4 text-light" style={{ background: '#adb5bd' }}>
-          <div className="d-flex justify-content-between align-items-center" >
+      <div className="row" >
+        <div className="col-12 order-2 order-lg-1 col-lg-4 p-0 text-light" style={{ background: '#adb5bd' }}>
 
-            <h4 className='text-dark fs-2 fw-bold py-2'>Chats</h4>
-            <h4 className='text-dark'><HiDotsVertical /></h4>
+
+          {/* Chat header  */}
+          <div className='d-flex  flex-column'>
+
+            <div className="d-flex justify-content-between align-items-center" >
+              <h4 className='text-dark fs-4 fw-bold py-2 cursor-pointer' onClick={() => setFindFriend(false)}>Chats</h4>
+              <h4 className='text-dark fs-4 fw-bold py-2 cursor-pointer' onClick={() => setFindFriend(true)}>Find Friends</h4>
+              <h4 className='text-dark'><HiDotsVertical /></h4>
+
+            </div>
+            {/* search bar  */}
+            <input className='form-control' type="text" placeholder='Search' />
+          </div>
+
+
+
+          {/* Connected user show  */}
+          <div>
+            {
+              findFriend ?
+                <FindFriend /> :
+                <ConnectedUser connectedUsers={connectedUsers} />
+            }
 
           </div>
-          <input className='form-control' type="text" placeholder='Search' />
-          {connectedUsers && connectedUsers.map((user) => {
-            return (
-              <>
-                <div className="d-flex justify-content-start align-items-center my-2 " style={{ cursor: "pointer" }}>
-
-                  <img src="/profile.png" alt="profile" className='' width="50px" />
-                  <p className='my-auto ms-2 text-dark fw-bold'>{user.name}</p>
-                </div>
-              </>
-            )
-          })}
         </div>
-        <div className="col-8 text-light" style={{ background: "#343a40", minHeight: "70vh" }}>
-           {chatMsg.length === 0 && <img src="/Conversation.gif" width="50%" className='ms-5 img-fluid border border-4' alt="gif" />}
 
-          <ScrollToBottom className="chatbox">
-          {chatMsg && chatMsg.map((item, ind) => (
-            // console.log(item,"getting data ")
+
+        {/* Chat section  */}
+
+        <div className="col-12 col-lg-8 order-1 order-lg-2 text-light p-0" style={{ background: "#343a40", minHeight: "70vh" }}>
+
+          {/* Image on empty message will show  */}
+
+          {chatMsg.length === 0 &&
+            <div className="d-flex  align-items-center flex-column">
+
+              <img src="/Conversation.gif" width="50%" className=' img-fluid ' alt="gif" />
+              <div className='text-muted text-center'>
+
+              <h4 className="fw-bold">Your Conversations Await!</h4>
+              <p>Don't miss out on the fun. Start chatting now and connect with friends in real-time!</p>
+              <p>Click "Find Friends" to discover new connections or revisit old ones. The conversation starts with you!</p>
+              </div>
+            </div>
+          }
+
+          {/* Chatting section  */}
+
+         {chatMsg.length > 0 && <ScrollToBottom className="chatbox">
+            {chatMsg && chatMsg.map((item, ind) => (
+              // console.log(item,"getting data ")
               <Message
                 bg={connectedUsers.find(user => user.name === item.loginUser.username)?.bg || randomClr} // Updated to use `find` method for background color
                 // onReply={handleReply}
@@ -113,10 +145,13 @@ useEffect(()=>{
                 user={item.id === id ? "" : item.loginUser.username}
                 key={ind}
                 position={item.id === id ? 'right' : 'left'}
-                // replyTo={item.replyTo}
+              // replyTo={item.replyTo}
               />
             ))}
-          </ScrollToBottom>
+          </ScrollToBottom>}
+
+          {/* Input section  */}
+
           <div className="d-flex gap-3 mt-1 px-2 mx-2">
             <div className="flex-grow-1">
               <TextField
@@ -143,7 +178,7 @@ useEffect(()=>{
               <Button className='mb-2 rounded-circle me-2 p-0' style={{ width: "35px", minWidth: "35px", height: "38px", color: "#fff" }}>
                 <TiAttachment className='fs-4' />
               </Button>
-              <Button color='primary' className='mb-2 rounded-circle p-0' onClick={() => { sendMessage(); }}  style={{ width: "35px", minWidth: "35px", height: "38px" }}>
+              <Button color='primary' className='mb-2 rounded-circle p-0' onClick={() => { sendMessage(); }} style={{ width: "35px", minWidth: "35px", height: "38px" }}>
                 <IoSend className='fs-4' />
               </Button>
             </div>

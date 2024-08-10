@@ -34,6 +34,14 @@ const AuthReducer = (state, action) => {
                         isLoading:false,
                         isAuth:false
                     }
+            case "GET_ALL_USERS":
+                return{
+
+                    ...state,
+                    isLoading:false,
+                    allUsers:action.payload
+                }
+                
         default:
             return state;
     }

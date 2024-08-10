@@ -39,7 +39,7 @@ code {
   display: inline-block;
   width: 100%;
   min-height: 73vh;
-  height: 73vh;
+  height: 80vh;
   overflow-y: auto;
   scrollbar-width: none;
   overflow-x: hidden;
@@ -92,7 +92,12 @@ code {
   padding: 5px;
   position: relative;
 }
-
+.cursor-pointer{
+  cursor: pointer;
+}
+.cursor-pointer:hover{
+text-decoration: underline;
+} 
 /* custom-textfield.css */
 .custom-textfield .MuiInputBase-input {
   color: #fff;
@@ -129,6 +134,9 @@ code {
   margin-top: 0.6rem;
   font-weight: 600;
   margin-left: 0.4rem;
+}
+.freqest:hover{
+  color: #212529;
 }
 @media (min-width:998px) {
   .name_logo{
