@@ -9,13 +9,15 @@ const AuthReducer = (state, action) => {
                 return{
                     ...state,
                     user:action.payload,
-                    isAuth:true
+                    isAuth:true,
+
                 }
         case 'SET_USER_LOGIN':
             return {
                 ...state,
                 user: action.payload,
-                isAuth:true
+                isAuth:true,
+              
             };
             case "HANDLE_INPUT":
            
@@ -32,7 +34,8 @@ const AuthReducer = (state, action) => {
                     return{
                         ...state,
                         isLoading:false,
-                        isAuth:false
+                        isAuth:false,
+                      
                     }
             case "GET_ALL_USERS":
                 return{
@@ -41,7 +44,11 @@ const AuthReducer = (state, action) => {
                     isLoading:false,
                     allUsers:action.payload
                 }
-                
+                case "GET_ALL_FRIENDS":
+                    return{
+                        ...state,
+                        friends:action.payload
+                    }
         default:
             return state;
     }

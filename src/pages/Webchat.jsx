@@ -22,9 +22,9 @@ const Webchat = () => {
   const [message, setMessage] = useState("");
   const [id, setId] = useState();
   const [chatMsg, setChatMsg] = useState([])
-  console.log(chatMsg)
+  const [selectedUser,setSelectedUser] = useState()
   const [connectedUsers, setConnectedUsers] = useState([]);
-  console.log(connectedUsers, "connected user")
+
   const [joinuser, setJoinUser] = useState([])
   const [privateMessages, setPrivateMessages] = useState([]);
   const [welcome, setWelcome] = useState();
@@ -39,6 +39,11 @@ const Webchat = () => {
     username,
     bg: randomClr
   }
+
+  const handleSelectedUser = (user) =>{
+    setSelectedUser(user)
+  }
+  console.log(selectedUser,"seleceted user ")
   useEffect(() => {
     socket = socketIo(secure_url);
     socket.on("connect", () => {
@@ -67,14 +72,15 @@ const Webchat = () => {
   }, [secure_url]);
 
   const sendMessage = () => {
-    if (message !== "") {
-      socket.emit('message', { message, id });
+    if (message !== "" && selectedUser) {
+      socket.emit('message', { message, id , receiverId: selectedUser._id,});
       setMessage('');
       // setReplyingTo(null); // Reset replyingTo state after sending the message
     }
   };
   useEffect(() => {
     socket.on("sendMessage", (data) => {
+      console.log(data, 'send message data ')
       setChatMsg(prevChatMsg => [...prevChatMsg, data]);
       const audio = new Audio('/incoming.mp3');
       audio.play();
@@ -88,7 +94,7 @@ const Webchat = () => {
 
 
           {/* Chat header  */}
-          <div className='d-flex  flex-column'>
+          <div className='d-flex  flex-column ps-2'>
 
             <div className="d-flex justify-content-between align-items-center" >
               <h4 className='text-dark fs-4 fw-bold py-2 cursor-pointer' onClick={() => setFindFriend(false)}>Chats</h4>
@@ -107,7 +113,7 @@ const Webchat = () => {
             {
               findFriend ?
                 <FindFriend /> :
-                <ConnectedUser connectedUsers={connectedUsers} />
+                <ConnectedUser connectedUsers={user.friends } handleSelectedUser={handleSelectedUser}/>
             }
 
           </div>
@@ -137,7 +143,7 @@ const Webchat = () => {
 
          {chatMsg.length > 0 && <ScrollToBottom className="chatbox">
             {chatMsg && chatMsg.map((item, ind) => (
-              // console.log(item,"getting data ")
+            
               <Message
                 bg={connectedUsers.find(user => user.name === item.loginUser.username)?.bg || randomClr} // Updated to use `find` method for background color
                 // onReply={handleReply}

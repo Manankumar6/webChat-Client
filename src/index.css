@@ -138,6 +138,19 @@ text-decoration: underline;
 .freqest:hover{
   color: #212529;
 }
+.alert-msg {
+  position: absolute;
+  bottom: 0;
+  left: 50%; /* Position the element at the center of the container */
+  transform: translateX(-50%); /* Move the element back by 50% of its own width */
+  color: white;
+  min-width: 10vw;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
+
+}
+
 @media (min-width:998px) {
   .name_logo{
     width: 40px;

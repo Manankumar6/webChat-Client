@@ -9,7 +9,7 @@ import Signup from './pages/Signup';
 import Webchat from './pages/Webchat';
 
 function App() {
- 
+  
   return (
    <>
    <Navbar/>
@@ -21,7 +21,7 @@ function App() {
     <Route path='/webchat' element={<Webchat/>}/>
     
    </Routes>
-  
+
    </>
   );
 }
