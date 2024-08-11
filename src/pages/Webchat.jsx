@@ -43,7 +43,7 @@ const Webchat = () => {
   const handleSelectedUser = (user) =>{
     setSelectedUser(user)
   }
-  console.log(selectedUser,"seleceted user ")
+
   useEffect(() => {
     socket = socketIo(secure_url);
     socket.on("connect", () => {
@@ -80,7 +80,7 @@ const Webchat = () => {
   };
   useEffect(() => {
     socket.on("sendMessage", (data) => {
-      console.log(data, 'send message data ')
+    
       setChatMsg(prevChatMsg => [...prevChatMsg, data]);
       const audio = new Audio('/incoming.mp3');
       audio.play();

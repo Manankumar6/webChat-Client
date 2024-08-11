@@ -19,8 +19,9 @@ const AuthProvider = ({ children }) => {
         },
         user: '',
         allUsers: [],
-        friends : []
-       
+        friends: [],
+
+
     };
     const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -28,11 +29,11 @@ const AuthProvider = ({ children }) => {
         const { name, value } = e.target;
         dispatch({ type: "HANDLE_INPUT", payload: { name, value } });
     };
-   
+
 
     const axiosInstance = axios.create({
-        baseURL: process.env.REACT_APP_API_BASE_URL || 
-        'http://localhost:5000/api/auth',
+        baseURL: process.env.REACT_APP_API_BASE_URL ||
+            'http://localhost:5000/api/auth',
         headers: { "Content-Type": "application/json" }, // Set default headers
         withCredentials: true, // Include credentials by default
         credentials: 'include', // Specify credentials to include
@@ -46,11 +47,11 @@ const AuthProvider = ({ children }) => {
             if (response.data) {
                 navigate('/webchat')
                 dispatch({ type: 'GET_USER', payload: response.data.user });
-                
+
             }
         } catch (error) {
             console.error('Error checking authentication:', error);
-          
+
         } finally {
             dispatch({ type: 'SET_LOADING', payload: false });
         }
@@ -64,7 +65,7 @@ const AuthProvider = ({ children }) => {
 
                 dispatch({ type: 'GET_USER', payload: data.user });
                 toast.success("Successfully Sign Up")
-             
+
             }
         } catch (error) {
             console.error('Error signing up:', error);
@@ -112,7 +113,7 @@ const AuthProvider = ({ children }) => {
 
             dispatch({ type: 'SET_LOADING', payload: true });
             const { data } = await axiosInstance.get("/getallusers")
-           
+
             if (data.success) {
                 dispatch({ type: "GET_ALL_USERS", payload: data.users })
             }
@@ -122,33 +123,45 @@ const AuthProvider = ({ children }) => {
     }
 
 
-    const addFriend = async (friendId)=>{
+    const addFriend = async (friendId) => {
         try {
-            const {data} = await axiosInstance.post(`/add-friend/${friendId}`)
-             if(data){
+            dispatch({ type: 'SET_LOADING', payload: true });
+            const { data } = await axiosInstance.post(`/add-friend/${friendId}`)
+            if (data) {
+                console.log(data)
                 toast.success(data.message)
-                }
+            }
         } catch (error) {
             toast.error(error.response.data.message)
             console.log(error)
+            dispatch({ type: 'SET_LOADING', payload: false });
         }
 
     }
 
-    const getAllFriends = async ()=>{
-        const {data } = await axiosInstance.get("/get-friends")
-        console.log(data)
-        if(data){
-            dispatch({type:"GET_ALL_FRIENDS", payload:data.friends})
+    const getAllFriends = async () => {
+        dispatch({ type: 'SET_LOADING', payload: true });
+        try {
+            const { data } = await axiosInstance.get("/get-friends")
+
+            if (data) {
+                dispatch({ type: "GET_ALL_FRIENDS", payload: data.friends })
+
+            }
+
+
+        } catch (error) {
+            console.log(error)
+            dispatch({ type: 'SET_LOADING', payload: false });
         }
     }
-    console.log(state.friends,'friend list ')
 
-    console.log(state.user,"from context user ")
-    useEffect(()=>{
+    useEffect(() => {
 
         getAllFriends()
-    },[state.user])
+    }, [state.user, state.isLoading])
+
+    
     useEffect(() => {
         checkAuth();
         getAllUsers()
@@ -156,7 +169,7 @@ const AuthProvider = ({ children }) => {
     }, [state.isAuth]);
 
     return (
-        <AuthContext.Provider value={{ ...state, handleInput, signUp, logIn, logOut,addFriend }}>
+        <AuthContext.Provider value={{ ...state, handleInput, signUp, logIn, logOut, addFriend }}>
             {children}
         </AuthContext.Provider>
     );

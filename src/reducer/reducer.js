@@ -43,11 +43,13 @@ const AuthReducer = (state, action) => {
                     ...state,
                     isLoading:false,
                     allUsers:action.payload
+                    
                 }
                 case "GET_ALL_FRIENDS":
                     return{
                         ...state,
-                        friends:action.payload
+                        friends:action.payload,
+                        isLoading:false
                     }
         default:
             return state;
