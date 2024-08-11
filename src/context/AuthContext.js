@@ -28,7 +28,8 @@ const AuthProvider = ({ children }) => {
 
 
     const axiosInstance = axios.create({
-        baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api/auth',
+        baseURL: process.env.REACT_APP_API_BASE_URL || 
+        'http://localhost:5000/api/auth',
         headers: { "Content-Type": "application/json" }, // Set default headers
         withCredentials: true, // Include credentials by default
         credentials: 'include', // Specify credentials to include
