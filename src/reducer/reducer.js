@@ -51,7 +51,13 @@ const AuthReducer = (state, action) => {
                     return{
                         ...state,
                         friends:action.payload,
-                        isLoading:false
+                        isLoading:false,
+                        frdLoading:false
+                    }
+                    case 'GET_FRIEND_LOADING':
+                    return{
+                        ...state,
+                        frdLoading:true
                     }
         default:
             return state;

@@ -20,6 +20,7 @@ const AuthProvider = ({ children }) => {
         user: '',
         allUsers: [],
         friends: [],
+        frdLoading:false
 
 
     };
@@ -114,7 +115,7 @@ const AuthProvider = ({ children }) => {
                 dispatch({ type: "GET_ALL_USERS", payload: data.users })
             }
         } catch (error) {
-            toast.error(error.response.data.message)
+          
             dispatch({ type: 'SET_LOADING', payload: false });
         }
     }
@@ -122,7 +123,7 @@ const AuthProvider = ({ children }) => {
 
     const addFriend = async (friendId) => {
         try {
-            dispatch({ type: 'SET_LOADING', payload: true });
+            dispatch({ type: 'GET_FRIEND_LOADING', payload: true });
             const { data } = await axiosInstance.post(`/add-friend/${friendId}`)
             if (data) {
                  toast.success(data.message)
@@ -130,13 +131,13 @@ const AuthProvider = ({ children }) => {
         } catch (error) {
             toast.error(error.response.data.message)
        
-            dispatch({ type: 'SET_LOADING', payload: false });
+            dispatch({ type: 'GET_FRIEND_LOADING', payload: false });
         }
 
     }
 
     const removeFriend = async(friendId) =>{
-        dispatch({ type: 'SET_LOADING', payload: true });
+        dispatch({ type: 'GET_FRIEND_LOADING', payload: true });
         try {
             
         const { data } = await axiosInstance.delete(`/remove-friend/${friendId}`);
@@ -146,11 +147,11 @@ const AuthProvider = ({ children }) => {
             }
         } catch (error) {
             console.log(error)
-            dispatch({ type: 'SET_LOADING', payload: false });
+            dispatch({ type: 'GET_FRIEND_LOADING', payload: false });
         }
     }
     const getAllFriends = async () => {
-        dispatch({ type: 'SET_LOADING', payload: true });
+        dispatch({ type: 'GET_FRIEND_LOADING', payload: true });
         try {
             const { data } = await axiosInstance.get("/get-friends")
 
@@ -163,15 +164,15 @@ const AuthProvider = ({ children }) => {
 
         } catch (error) {
             console.log(error)
-            dispatch({ type: 'SET_LOADING', payload: false });
+            dispatch({ type: 'GET_FRIEND_LOADING', payload: false });
         }
     }
 
 
     useEffect(() => {
-        getAllFriends()
+        getAllFriends() 
 
-    }, [state.user, state.isLoading])
+    }, [state.user,state.frdLoading])
 
 
     useEffect(() => {

@@ -77,6 +77,7 @@ const Chat = () => {
   useEffect(() => {
     socket.on("sendMessage", (data) => {
       setChatMsg(prevChatMsg => [...prevChatMsg, data]);
+      console.log(chatMsg,"chat msg f")
       const audio = new Audio('/incoming.mp3');
       audio.play();
     });

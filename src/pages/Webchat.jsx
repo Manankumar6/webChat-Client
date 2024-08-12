@@ -22,7 +22,7 @@ const Webchat = () => {
   const [message, setMessage] = useState("");
   const [id, setId] = useState();
   const [chatMsg, setChatMsg] = useState([])
-  const [selectedUser,setSelectedUser] = useState()
+  const [selectedUser, setSelectedUser] = useState()
   const [connectedUsers, setConnectedUsers] = useState([]);
 
   const [joinuser, setJoinUser] = useState([])
@@ -40,8 +40,9 @@ const Webchat = () => {
     bg: randomClr
   }
 
-  const handleSelectedUser = (user) =>{
+  const handleSelectedUser = (user) => {
     setSelectedUser(user)
+    console.log(user, "from webchat")
   }
 
   useEffect(() => {
@@ -72,15 +73,16 @@ const Webchat = () => {
   }, [secure_url]);
 
   const sendMessage = () => {
-    if (message !== "" && selectedUser) {
-      socket.emit('message', { message, id , receiverId: selectedUser._id,});
+    if (message !== "") {
+      socket.emit('login_user_msg', { message, id });
       setMessage('');
+    
       // setReplyingTo(null); // Reset replyingTo state after sending the message
     }
   };
   useEffect(() => {
-    socket.on("sendMessage", (data) => {
-    
+    socket.on("receiveMsg", (data) => {
+      console.log(data)
       setChatMsg(prevChatMsg => [...prevChatMsg, data]);
       const audio = new Audio('/incoming.mp3');
       audio.play();
@@ -113,7 +115,7 @@ const Webchat = () => {
             {
               findFriend ?
                 <FindFriend /> :
-                <ConnectedUser connectedUsers={user.friends } handleSelectedUser={handleSelectedUser}/>
+                <ConnectedUser connectedUsers={user.friends} handleSelectedUser={handleSelectedUser} />
             }
 
           </div>
@@ -132,23 +134,36 @@ const Webchat = () => {
               <img src="/Conversation.gif" width="50%" className=' img-fluid ' alt="gif" />
               <div className='text-muted text-center'>
 
-              <h4 className="fw-bold">Your Conversations Await!</h4>
-              <p>Don't miss out on the fun. Start chatting now and connect with friends in real-time!</p>
-              <p>Click "Find Friends" to discover new connections or revisit old ones. The conversation starts with you!</p>
+                <h4 className="fw-bold">Your Conversations Await!</h4>
+                <p>Don't miss out on the fun. Start chatting now and connect with friends in real-time!</p>
+                <p>Click "Find Friends" to discover new connections or revisit old ones. The conversation starts with you!</p>
               </div>
             </div>
           }
 
+          {/* selected user details  */}
+         {selectedUser&& <>
+         <div className="d-flex  align-items-center p-3 shadow-lg">
+
+          <img src="/profile.png" alt="profile" className='img-fluid' width="40px" />
+          <div className="d-flex flex-column ms-3">
+
+         <h4>{selectedUser.fullName}</h4>
+         <p style={{fontSize:"12px"}}>username : {selectedUser.userName}</p>
+          </div>
+         </div>
+         </>
+         }
           {/* Chatting section  */}
 
-         {chatMsg.length > 0 && <ScrollToBottom className="chatbox">
+          {chatMsg.length > 0 && <ScrollToBottom className="chatbox">
             {chatMsg && chatMsg.map((item, ind) => (
-            
+
               <Message
-                bg={connectedUsers.find(user => user.name === item.loginUser.username)?.bg || randomClr} // Updated to use `find` method for background color
+                bg={connectedUsers.find(user => user.name === item.loginUser)?.bg || randomClr} // Updated to use `find` method for background color
                 // onReply={handleReply}
                 message={item.message}
-                user={item.id === id ? "" : item.loginUser.username}
+                user={item.id === id ? "" : item.loginUser}
                 key={ind}
                 position={item.id === id ? 'right' : 'left'}
               // replyTo={item.replyTo}
