@@ -51,9 +51,8 @@ const AuthProvider = ({ children }) => {
             }
         } catch (error) {
             console.error('Error checking authentication:', error);
-
-        } finally {
             dispatch({ type: 'SET_LOADING', payload: false });
+
         }
     };
 
@@ -70,9 +69,8 @@ const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error('Error signing up:', error);
             toast.error("Error signing up")
-        } finally {
             dispatch({ type: 'SET_LOADING', payload: false });
-        }
+        } 
     };
 
     const logIn = async (userName, password) => {
@@ -87,7 +85,6 @@ const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error('Error logging in:', error);
             toast.error("Error logging in")
-        } finally {
             dispatch({ type: 'SET_LOADING', payload: false });
         }
     };
@@ -102,7 +99,6 @@ const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error('Error logging out:', error);
             toast.error("Error logging out")
-        } finally {
             dispatch({ type: 'SET_LOADING', payload: false });
         }
     };
@@ -118,7 +114,8 @@ const AuthProvider = ({ children }) => {
                 dispatch({ type: "GET_ALL_USERS", payload: data.users })
             }
         } catch (error) {
-            console.log(error)
+            toast.error(error.response.data.message)
+            dispatch({ type: 'SET_LOADING', payload: false });
         }
     }
 
@@ -128,23 +125,37 @@ const AuthProvider = ({ children }) => {
             dispatch({ type: 'SET_LOADING', payload: true });
             const { data } = await axiosInstance.post(`/add-friend/${friendId}`)
             if (data) {
-                console.log(data)
-                toast.success(data.message)
+                 toast.success(data.message)
             }
         } catch (error) {
             toast.error(error.response.data.message)
-            console.log(error)
+       
             dispatch({ type: 'SET_LOADING', payload: false });
         }
 
     }
 
+    const removeFriend = async(friendId) =>{
+        dispatch({ type: 'SET_LOADING', payload: true });
+        try {
+            
+        const { data } = await axiosInstance.delete(`/remove-friend/${friendId}`);
+            if(data){
+                console.log(data)
+                dispatch({ type: "GET_ALL_FRIENDS", payload: data.friends })
+            }
+        } catch (error) {
+            console.log(error)
+            dispatch({ type: 'SET_LOADING', payload: false });
+        }
+    }
     const getAllFriends = async () => {
         dispatch({ type: 'SET_LOADING', payload: true });
         try {
             const { data } = await axiosInstance.get("/get-friends")
 
             if (data) {
+                console.log(data)
                 dispatch({ type: "GET_ALL_FRIENDS", payload: data.friends })
 
             }
@@ -156,12 +167,13 @@ const AuthProvider = ({ children }) => {
         }
     }
 
-    useEffect(() => {
 
+    useEffect(() => {
         getAllFriends()
+
     }, [state.user, state.isLoading])
 
-    
+
     useEffect(() => {
         checkAuth();
         getAllUsers()
@@ -169,7 +181,7 @@ const AuthProvider = ({ children }) => {
     }, [state.isAuth]);
 
     return (
-        <AuthContext.Provider value={{ ...state, handleInput, signUp, logIn, logOut, addFriend }}>
+        <AuthContext.Provider value={{ ...state, handleInput, signUp, logIn, logOut, addFriend,removeFriend }}>
             {children}
         </AuthContext.Provider>
     );

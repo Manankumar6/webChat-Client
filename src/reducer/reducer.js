@@ -10,6 +10,7 @@ const AuthReducer = (state, action) => {
                     ...state,
                     user:action.payload,
                     isAuth:true,
+                    isLoading:false
 
                 }
         case 'SET_USER_LOGIN':
@@ -17,6 +18,7 @@ const AuthReducer = (state, action) => {
                 ...state,
                 user: action.payload,
                 isAuth:true,
+                isLoading:false
               
             };
             case "HANDLE_INPUT":

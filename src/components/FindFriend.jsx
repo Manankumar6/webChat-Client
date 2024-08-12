@@ -23,7 +23,7 @@ const FindFriend = () => {
 
               </div>
               <div>
-                <MdPersonAdd className='fs-3 me-2 freqest' onClick={() => reqFriend(user._id)} />
+               <p  onClick={() => reqFriend(user._id)}>Follow <MdPersonAdd className='fs-5 mx-1 freqest' /></p> 
               </div>
             </div>
               <hr />
