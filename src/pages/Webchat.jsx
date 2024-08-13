@@ -24,13 +24,13 @@ const Webchat = () => {
   const [chatMsg, setChatMsg] = useState([])
   const [selectedUser, setSelectedUser] = useState()
   const [connectedUsers, setConnectedUsers] = useState([]);
-
+  const [room, setRoom] = useState();
   const [joinuser, setJoinUser] = useState([])
   const [privateMessages, setPrivateMessages] = useState([]);
   const [welcome, setWelcome] = useState();
   const [findFriend, setFindFriend] = useState(false)
 
-
+  console.log(selectedUser, "selected user ")
   const clr = ["#f6bd60", "#f28482", "#f5cac3", "#84a59d", "#90e0ef", "#c77dff"]
   const rndnum = Math.floor(Math.random() * clr.length)
   const randomClr = clr[rndnum];
@@ -43,6 +43,7 @@ const Webchat = () => {
   const handleSelectedUser = (user) => {
     setSelectedUser(user)
     console.log(user, "from webchat")
+
   }
 
   useEffect(() => {
@@ -56,6 +57,9 @@ const Webchat = () => {
       socket.on("connectedUser", (data) => {
         setConnectedUsers(data)
       })
+    });
+    socket.on("joinedRoom", (roomName) => {
+      setRoom(roomName); // Store the room name in state when joined
     });
 
     socket.on("welcome", ({ message }) => {
@@ -72,11 +76,21 @@ const Webchat = () => {
     // eslint-disable-next-line
   }, [secure_url]);
 
+
+ 
+  useEffect(() => {
+    if (selectedUser) {
+      const roomName = [id, selectedUser.id].sort().join("-"); // Generate room name
+      socket.emit("joinRoom", { userId: id, selectedUserId: selectedUser.id });
+      setRoom(roomName); // Store the room name in state
+    }
+  }, [selectedUser, id]);
+
   const sendMessage = () => {
     if (message !== "") {
-      socket.emit('login_user_msg', { message, id });
+      socket.emit('login_user_msg', {roomName: room, message, id });
       setMessage('');
-    
+
       // setReplyingTo(null); // Reset replyingTo state after sending the message
     }
   };
@@ -89,6 +103,11 @@ const Webchat = () => {
     });
   }, [])
 
+  useEffect(()=>{
+    socket.on('receiveMessage',(data)=>{
+      console.log(data, 'receive message data')
+    })
+  })
   return (
     <div className='container-fluid'>
       <div className="row" >
@@ -105,7 +124,7 @@ const Webchat = () => {
 
             </div>
             {/* search bar  */}
-            <input className='form-control' type="text" placeholder='Search' />
+            <input className='form-control ' type="text" placeholder='Search' />
           </div>
 
 
@@ -128,7 +147,7 @@ const Webchat = () => {
 
           {/* Image on empty message will show  */}
 
-          {chatMsg.length === 0 &&
+          {selectedUser === undefined &&
             <div className="d-flex  align-items-center flex-column">
 
               <img src="/Conversation.gif" width="50%" className=' img-fluid ' alt="gif" />
@@ -142,34 +161,35 @@ const Webchat = () => {
           }
 
           {/* selected user details  */}
-         {selectedUser&& <>
-         <div className="d-flex  align-items-center p-3 shadow-lg">
+          {selectedUser && <>
+            <div className="d-flex  align-items-center p-3 shadow-lg">
 
-          <img src="/profile.png" alt="profile" className='img-fluid' width="40px" />
-          <div className="d-flex flex-column ms-3">
+              <img src="/profile.png" alt="profile" className='img-fluid' width="40px" />
+              <div className="d-flex flex-column ms-3">
 
-         <h4>{selectedUser.fullName}</h4>
-         <p style={{fontSize:"12px"}}>username : {selectedUser.userName}</p>
-          </div>
-         </div>
-         </>
-         }
+                <h4>{selectedUser.fullName}</h4>
+                <p style={{ fontSize: "12px" }}>username : {selectedUser.userName}</p>
+              </div>
+            </div>
+          </>
+          }
           {/* Chatting section  */}
 
-          {chatMsg.length > 0 && <ScrollToBottom className="chatbox">
-            {chatMsg && chatMsg.map((item, ind) => (
+          {selectedUser !== undefined &&
+            <ScrollToBottom className="chatbox">
+              {chatMsg && chatMsg.map((item, ind) => (
 
-              <Message
-                bg={connectedUsers.find(user => user.name === item.loginUser)?.bg || randomClr} // Updated to use `find` method for background color
-                // onReply={handleReply}
-                message={item.message}
-                user={item.id === id ? "" : item.loginUser}
-                key={ind}
-                position={item.id === id ? 'right' : 'left'}
-              // replyTo={item.replyTo}
-              />
-            ))}
-          </ScrollToBottom>}
+                <Message
+                  bg={connectedUsers.find(user => user.name === item.loginUser)?.bg || randomClr} // Updated to use `find` method for background color
+                  // onReply={handleReply}
+                  message={item.message}
+                  user={item.id === id ? "" : item.loginUser}
+                  key={ind}
+                  position={item.id === id ? 'right' : 'left'}
+                // replyTo={item.replyTo}
+                />
+              ))}
+            </ScrollToBottom>}
 
           {/* Input section  */}
 

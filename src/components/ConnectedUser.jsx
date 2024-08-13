@@ -12,8 +12,8 @@ const {friends,removeFriend} = useAuthContext();
          {friends && friends.map((user) => {
               return (
                 <>
-                  <div className="d-flex justify-content-between align-items-center my-2 " style={{ cursor: "pointer" }} onClick={()=>handleSelectedUser(user)}>
-                  <div className='d-flex'>
+                  <div className="d-flex justify-content-between align-items-center my-2 " style={{ cursor: "pointer" }} >
+                  <div className='d-flex ' onClick={()=>handleSelectedUser(user)}>
 
                     <img src="/profile.png" alt="profile" className='' width="50px" />
                     <p className='my-auto ms-2 text-dark fw-bold'>{user.userName}</p>

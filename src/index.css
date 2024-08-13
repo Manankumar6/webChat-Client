@@ -46,7 +46,15 @@ code {
 
   -ms-overflow-style: none;
 }
-
+.form-control{
+  width: 98%;
+}
+.form-control:focus{
+  border: none;
+  outline: none;
+  box-shadow: none;
+  
+}
 .right {
   /* float: right; */
 

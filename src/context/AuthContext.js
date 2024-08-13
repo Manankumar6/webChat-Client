@@ -48,8 +48,7 @@ const AuthProvider = ({ children }) => {
             if (response.data) {
                 navigate('/webchat')
                 dispatch({ type: 'GET_USER', payload: response.data.user });
-
-            }
+             }
         } catch (error) {
             console.error('Error checking authentication:', error);
             dispatch({ type: 'SET_LOADING', payload: false });
